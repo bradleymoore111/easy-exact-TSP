@@ -32,8 +32,6 @@ function getVertexesFromInt(n) {
 	// This is totally way more inefficient than it needs to be, and that's okay.
 	const s = (n | 0).toString(2);
 
-	// console.log(n, s);
-
 	const points = [];
 	for (let i=0; i<s.length; i++) {
 		if (s[s.length - 1 - i] == '1') {
@@ -59,8 +57,6 @@ function setL(A, v, D) {
 		L[A] = [];
 	}
 
-	// console.log("        Setting", A, v, D);
-
 	L[A][v] = D;
 }
 
@@ -81,7 +77,6 @@ function DynamicExactTSPSolver(points) {
 
 	if (points.length > 40) {
 		console.log("That's a really bad idea.");
-		return [];
 	}
 
 	L = [];
@@ -90,15 +85,10 @@ function DynamicExactTSPSolver(points) {
 
 	dmatrix = setAdjacency(points);
 
-	// console.log("n:", n);
-	// console.log("dmatrix:", dmatrix);
-
 	const max = Math.pow(2, n-1) - 1;
 	for (let A=1; A<=max; A++) {
 		const subspan = getVertexesFromInt(A);
-		// console.log("A:", A, "- subspan:", subspan);
 		for (const v of subspan) {
-			// console.log("  v:", v);
 			if (subspan.length == 1) {
 				// Base case
 				// console.log("    Base case, D:", D(n-1, v));
@@ -106,14 +96,11 @@ function DynamicExactTSPSolver(points) {
 				// console.log("    L:", L);
 			} else {
 				// Find min
-				// console.log("    Other case");
 				let currentMin = Infinity;
 				for (const u of subspan) {
 					if (u == v) {
 						continue;
 					} else {
-						// console.log("      u:", u);
-						// console.log("      getL(A - v, u):", A-v, u, getL(A-v, u));
 						currentMin = Math.min(
 							currentMin, 
 							getL(A - Math.pow(2, v), u) + D(u, v));
@@ -126,7 +113,6 @@ function DynamicExactTSPSolver(points) {
 
 	let currentMin = Infinity;
 	for (const v of getVertexesFromInt(max)) {
-		// console.log("Possible, v:", v, getL(max, v) + D(v, n-1));
 		currentMin = Math.min(
 			currentMin,
 			getL(max, v) + D(v, n-1));
@@ -140,24 +126,12 @@ function DynamicExactTSPSolver(points) {
 	let i = 0;
 	while (currA > 0) {
 		if (i++ > 100) {
-			console.log("Fuck.", i);
+			console.log("Heck.", i);
 			break;
 		}
 		// Find which next spot results in the min available.
 		const v = path[path.length - 1];
-		// console.log("Testing v:", v);
-		// console.log("Remaining path:", remainingPath);
 		for (const u of getVertexesFromInt(currA)) {
-			// if (u == v) {
-			// 	console.log("Skipping.");
-			// 	continue;
-			// }
-			// console.log("  Testing u:", u);
-			// Test if this v resulted in the remainingPath
-			// console.log(
-			// 	"    getL(currA - Math.pow(2, u), v):", "getL(" + currA + " - " + Math.pow(2, u) + ", " + u + "):",
-			// 	getL(currA - Math.pow(2, u), u));
-			// console.log("    D(u, v):", D(u, v));
 			// So the goal is for u = 0, because getL(A, u) == remainingPath - D(u, v)
 			if (getL(currA, u) == remainingPath - D(u, v)) {
 				currA -= Math.pow(2, u);
@@ -170,16 +144,3 @@ function DynamicExactTSPSolver(points) {
 
 	return path;
 }
-
-// for (let i=0; i<16; i++) {
-// 	console.log(i, getVertexesFromInt(i));
-// }
-
-let pp = [
-	[0, 0],
-	[2, -1],
-	[2, 1],
-	[1, 1]
-];
-
-DynamicExactTSPSolver(pp);
