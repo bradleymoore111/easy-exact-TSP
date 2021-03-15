@@ -1,3 +1,4 @@
+
 const DynamicExactTSPSolver = (() => {
 	let matrix = [];
 
@@ -53,7 +54,9 @@ const DynamicExactTSPSolver = (() => {
 		return L[A][v];
 	}
 
+	let timesCalled = 0;
 	function setL(A, v, D) {
+		timesCalled++;
 		if (!L[A]) {
 			L[A] = [];
 		}
@@ -145,6 +148,24 @@ const DynamicExactTSPSolver = (() => {
 
 		return path;
 	}
+
+	const points = [
+		[483, 169],
+		[438, 270],
+		[393, 384],
+		[436, 529],
+		[494, 642],
+		[956, 660],
+		[971, 543],
+		[947, 412],
+		[965, 299],
+		[919, 148],
+	];
+
+	const tour = DynamicExactTSPSolver(points);
+
+	console.log("Dynamic exact:", tour);
+	console.log("Times called:", timesCalled);
 
 	return DynamicExactTSPSolver;
 })();
