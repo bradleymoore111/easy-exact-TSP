@@ -1,4 +1,3 @@
-
 const DynamicExactTSPSolver = (() => {
 	let matrix = [];
 
@@ -70,6 +69,7 @@ const DynamicExactTSPSolver = (() => {
 
 	function DynamicExactTSPSolver(points) {
 		// O(n^2 2^n) solver.
+		timesCalled = 0;
 
 		if (points.length == 0) {
 			return []
@@ -145,6 +145,8 @@ const DynamicExactTSPSolver = (() => {
 				} 
 			}
 		}
+
+		console.log("Dynamic/exact times called:", timesCalled);
 
 		return path;
 	}
